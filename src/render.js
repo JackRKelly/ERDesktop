@@ -7,10 +7,21 @@ selectVideo.addEventListener("click", () => {
   getSources();
 });
 
+startVideo.onclick = (e) => {
+  mediaRecorder.start();
+  startVideo.classList.add("is-danger");
+  startVideo.innerText = "Recording";
+};
+
+stopVideo.onclick = (e) => {
+  mediaRecorder.stop();
+  startVideo.classList.remove("is-danger");
+  startVideo.innerText = "Start";
+};
+
 const { desktopCapturer, remote } = require("electron");
-
 const { Menu } = remote;
-
+const { writeFile } = require("fs");
 const { dialog } = remote;
 
 const getSources = async () => {
@@ -79,7 +90,7 @@ const handleStop = async (e) => {
 
   console.log(filePath);
 
-  msWriteProfilerMark(filePath, buffer, () => {
+  writeFile(filePath, buffer, () => {
     console.log("video save successful");
   });
 };
