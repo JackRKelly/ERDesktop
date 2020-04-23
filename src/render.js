@@ -29,3 +29,31 @@ const getSources = async () => {
 
   videoOptionsMenu.popup();
 };
+
+let mediaRecorder;
+const recordedChunks = [];
+
+const selectSource = async (source) => {
+  selectVideo.innerText = source.name;
+
+  const contstraints = {
+    audio: false,
+    video: {
+      mandatory: {
+        chromeMediaSource: "desktop",
+        chromeMediaSourceId: source.id,
+      },
+    },
+  };
+
+  const stream = await navigator.mediaDevices.getUserMedia(contstraints);
+
+  videoPreview.srcObject = stream;
+  videoPreview.play();
+
+  const options = { mimeType: "video/webm; codecs=vp9" };
+  mediaRecorder = new mediaRecorder(stream, options);
+
+  mediaRecorder.ondataavailable = handleDataAvailable;
+  mediaRecorder.onstop = handleStop;
+};
