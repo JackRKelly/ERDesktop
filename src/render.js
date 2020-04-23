@@ -10,3 +10,22 @@ selectVideo.addEventListener("click", () => {
 const { desktopCapturer, remote } = require("electron");
 
 const { Menu } = remote;
+
+const getSources = async () => {
+  const inputSources = await desktopCapturer.getSources({
+    types: ["window", "screen"],
+  });
+
+  console.log(inputSources);
+
+  const videoOptionsMenu = Menu.buildFromTemplate(
+    inputSources.map((source) => {
+      return {
+        label: source.name,
+        click: () => selectSource(source),
+      };
+    })
+  );
+
+  videoOptionsMenu.popup();
+};
