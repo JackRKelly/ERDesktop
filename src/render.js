@@ -11,6 +11,8 @@ const { desktopCapturer, remote } = require("electron");
 
 const { Menu } = remote;
 
+const { dialog } = remote;
+
 const getSources = async () => {
   const inputSources = await desktopCapturer.getSources({
     types: ["window", "screen"],
@@ -52,8 +54,32 @@ const selectSource = async (source) => {
   videoPreview.play();
 
   const options = { mimeType: "video/webm; codecs=vp9" };
-  mediaRecorder = new mediaRecorder(stream, options);
+  mediaRecorder = new MediaRecorder(stream, options);
 
   mediaRecorder.ondataavailable = handleDataAvailable;
   mediaRecorder.onstop = handleStop;
+};
+
+const handleDataAvailable = (e) => {
+  console.log("data available");
+  recordedChunks.push(e.data);
+};
+
+const handleStop = async (e) => {
+  const blob = new Blob(recordedChunks, {
+    type: "video/webm; codecs=vp9",
+  });
+
+  const buffer = Buffer.from(await blob.arrayBuffer());
+
+  const { filePath } = await dialog.showSaveDialog({
+    buttonLabel: "Save video",
+    defaultPath: `vid-${Date.now()}.webm`,
+  });
+
+  console.log(filePath);
+
+  msWriteProfilerMark(filePath, buffer, () => {
+    console.log("video save successful");
+  });
 };
