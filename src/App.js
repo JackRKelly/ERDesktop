@@ -1,13 +1,11 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import "./App.css";
-const electron = window.require("electron");
-const fs = electron.remote.require("fs");
-const ipcRenderer = electron.ipcRenderer;
 
 function App() {
-  const videoPreview = useRef(null);
+  const [selectContent, setSelectContent] = useState("Select Source");
+  const videoPreview = React.createRef();
 
-  const { desktopCapturer, remote } = require("electron");
+  const { desktopCapturer, remote } = window.require("electron");
   const { Menu } = remote;
   const { writeFile } = require("fs");
   const { dialog } = remote;
@@ -16,13 +14,11 @@ function App() {
 
   const startVideo = () => {
     mediaRecorder.start();
-    startVideo.classList.add("is-danger");
-    startVideo.innerText = "Recording";
+    console.log("start video");
   };
   const stopVideo = () => {
     mediaRecorder.stop();
-    startVideo.classList.remove("is-danger");
-    startVideo.innerText = "Start";
+    console.log("stop video");
   };
 
   const getSources = async () => {
@@ -43,7 +39,7 @@ function App() {
   };
 
   const selectSource = async (source) => {
-    selectVideo.innerText = source.name;
+    setSelectContent(source.name);
 
     const contstraints = {
       audio: false,
@@ -55,16 +51,19 @@ function App() {
       },
     };
 
-    const stream = await navigator.mediaDevices.getUserMedia(contstraints);
+    await navigator.mediaDevices
+      .getUserMedia(contstraints)
+      .then((stream) => {
+        videoPreview.current.srcObject = stream;
+        videoPreview.current.play();
 
-    videoPreview.srcObject = stream;
-    videoPreview.play();
+        const options = { mimeType: "video/webm; codecs=vp9" };
+        mediaRecorder = new MediaRecorder(stream, options);
 
-    const options = { mimeType: "video/webm; codecs=vp9" };
-    mediaRecorder = new MediaRecorder(stream, options);
-
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.onstop = handleStop;
+        mediaRecorder.ondataavailable = handleDataAvailable;
+        mediaRecorder.onstop = handleStop;
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleDataAvailable = (e) => {
@@ -94,17 +93,17 @@ function App() {
       <main>
         <h1>ERDesktop</h1>
 
-        <video id="videoPreview" ref={videoPreview}></video>
+        <video id="videoPreview" src="" ref={videoPreview}></video>
 
-        <div class="button-container">
-          <button id="startVideo" onclick={startVideo}>
+        <div className="button-container">
+          <button id="startVideo" onClick={startVideo}>
             Start
           </button>
-          <button id="stopVideo" onclick={stopVideo}>
+          <button id="stopVideo" onClick={stopVideo}>
             Stop
           </button>
-          <button id="selectVideo" onclick={getSources}>
-            Select Source
+          <button id="selectVideo" onClick={getSources}>
+            {selectContent}
           </button>
         </div>
       </main>
