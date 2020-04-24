@@ -1,8 +1,24 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  margin: 0;
   background-color: white;
+}
+
+main {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+}
+
+#videoPreview {
+  width: 50vw;
+  display: block;
+}
+
+.button-container {
+  margin: 10px 0;
 }
