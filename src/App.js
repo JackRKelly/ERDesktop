@@ -4,7 +4,6 @@ import "./App.css";
 function App() {
   const [selectContent, setSelectContent] = useState("Select Source");
   const videoPreview = useRef(null);
-
   const { desktopCapturer, remote } = window.require("electron");
   const { Menu } = remote;
   const { writeFile } = window.require("fs");
@@ -14,12 +13,10 @@ function App() {
 
   const startVideo = () => {
     mediaRecorder.start();
-    console.log("start video");
   };
 
   const stopVideo = () => {
     mediaRecorder.stop();
-    console.log("stop video");
   };
 
   const getSources = async () => {
@@ -68,7 +65,6 @@ function App() {
   };
 
   const handleDataAvailable = (e) => {
-    console.log("data available");
     recordedChunks.push(e.data);
   };
 
@@ -85,7 +81,7 @@ function App() {
     });
 
     writeFile(filePath, buffer, () => {
-      console.log("video save successful");
+      console.log("Video saved successfully");
     });
   };
 
