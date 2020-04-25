@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 
 function App() {
   const [selectContent, setSelectContent] = useState("Select Source");
-  const videoPreview = React.createRef();
+  const videoPreview = useRef(null);
 
   const { desktopCapturer, remote } = window.require("electron");
   const { Menu } = remote;
@@ -54,6 +54,7 @@ function App() {
     await navigator.mediaDevices
       .getUserMedia(contstraints)
       .then((stream) => {
+        console.log(stream);
         videoPreview.current.srcObject = stream;
         videoPreview.current.play();
 
@@ -93,7 +94,7 @@ function App() {
       <main>
         <h1>ERDesktop</h1>
 
-        <video id="videoPreview" src="" ref={videoPreview}></video>
+        <video id="videoPreview" autoPlay ref={videoPreview}></video>
 
         <div className="button-container">
           <button id="startVideo" onClick={startVideo}>
