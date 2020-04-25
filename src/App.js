@@ -7,15 +7,16 @@ function App() {
 
   const { desktopCapturer, remote } = window.require("electron");
   const { Menu } = remote;
-  const { writeFile } = require("fs");
+  const { writeFile } = window.require("fs");
   const { dialog } = remote;
-  let mediaRecorder;
+  let [mediaRecorder, setMediaRecorder] = useState(null);
   const recordedChunks = [];
 
   const startVideo = () => {
     mediaRecorder.start();
     console.log("start video");
   };
+
   const stopVideo = () => {
     mediaRecorder.stop();
     console.log("stop video");
@@ -54,15 +55,14 @@ function App() {
     await navigator.mediaDevices
       .getUserMedia(contstraints)
       .then((stream) => {
-        console.log(stream);
         videoPreview.current.srcObject = stream;
         videoPreview.current.play();
 
         const options = { mimeType: "video/webm; codecs=vp9" };
         mediaRecorder = new MediaRecorder(stream, options);
-
         mediaRecorder.ondataavailable = handleDataAvailable;
         mediaRecorder.onstop = handleStop;
+        setMediaRecorder(mediaRecorder);
       })
       .catch((err) => console.error(err));
   };
@@ -105,6 +105,13 @@ function App() {
           </button>
           <button id="selectVideo" onClick={getSources}>
             {selectContent}
+          </button>
+          <button
+            onClick={() => {
+              console.log(mediaRecorder);
+            }}
+          >
+            Log media recorder
           </button>
         </div>
       </main>
