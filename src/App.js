@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "./App.css";
+import "./App.scss";
 
 function App() {
   const [selectContent, setSelectContent] = useState("Select Source");
@@ -88,7 +88,10 @@ function App() {
   return (
     <div className="App">
       <main>
-        <h1>ERDesktop</h1>
+        <h1>
+          ERDesktop
+          {selectContent === "Select Source" ? "" : `- ${selectContent}`}
+        </h1>
 
         <video id="videoPreview" autoPlay ref={videoPreview}></video>
 
