@@ -14,11 +14,23 @@ function App() {
   const recordedChunks = [];
 
   const startVideo = () => {
-    mediaRecorder.start();
+    if (mediaRecorder == null) {
+      alert("Select a source to record.");
+    } else if (mediaRecorder.state === "recording") {
+      alert("You must stop recording first.");
+    } else {
+      mediaRecorder.start();
+    }
   };
 
   const stopVideo = () => {
-    mediaRecorder.stop();
+    if (mediaRecorder == null) {
+      alert("Select a source and start recording first.");
+    } else if (mediaRecorder.state === "inactive") {
+      alert("You must start recording first.");
+    } else {
+      mediaRecorder.stop();
+    }
   };
 
   const getSources = async () => {
@@ -34,7 +46,6 @@ function App() {
         };
       })
     );
-
     videoOptionsMenu.popup();
   };
 
@@ -96,6 +107,7 @@ function App() {
         </h1>
 
         <SVG className="cog" src={Cog} />
+
         <video id="videoPreview" autoPlay ref={videoPreview}></video>
 
         <div className="button-container">
@@ -106,14 +118,7 @@ function App() {
             Stop
           </button>
           <button id="selectVideo" onClick={getSources}>
-            {selectContent}
-          </button>
-          <button
-            onClick={() => {
-              console.log(mediaRecorder);
-            }}
-          >
-            Log media recorder
+            Source: {selectContent}
           </button>
         </div>
       </main>
