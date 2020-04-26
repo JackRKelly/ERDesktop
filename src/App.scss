@@ -9,6 +9,9 @@ body {
     h1 {
       font-size: 40px;
       line-height: 1;
+      max-width: 90%;
+      white-space: nowrap;
+      overflow: hidden;
     }
     .cog {
       position: absolute;
@@ -16,6 +19,13 @@ body {
       right: 0;
       width: 40px;
       height: 40px;
+    }
+    #videoPreview {
+      width: 100%;
+      max-height: 85vh;
+    }
+    .button-container {
+      padding: 15px 0;
     }
   }
 }
