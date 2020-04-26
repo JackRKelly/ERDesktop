@@ -24,5 +24,5 @@ npm run electron
 ### Screenshots:
 
 ![ERDesktop](https://i.ibb.co/QD5nCB3/Screenshot-71.png "ERDesktop")
-![Popout Select](https://i.ibb.co/ZcWVDTh/Screenshot-70.png "Popout Select")
+![Popout Select](https://i.ibb.co/0hS4j9S/Screenshot-72.png "Popout Select")
 ![Screen Preview](https://i.ibb.co/dK3Yb6P/Screenshot-69.png "Screen Preview")
