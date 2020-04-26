@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./App.scss";
+import SVG from "react-inlinesvg";
+import Cog from "./assets/cog.svg";
 
 function App() {
   const [selectContent, setSelectContent] = useState("Select Source");
@@ -93,6 +95,7 @@ function App() {
           {selectContent === "Select Source" ? "" : `- ${selectContent}`}
         </h1>
 
+        <SVG className="cog" src={Cog} />
         <video id="videoPreview" autoPlay ref={videoPreview}></video>
 
         <div className="button-container">
