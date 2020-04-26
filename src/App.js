@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
 import "./App.scss";
-import SVG from "react-inlinesvg";
-import Cog from "./assets/cog.svg";
 
 function App() {
   const [selectContent, setSelectContent] = useState("Select Source");
+  const [isRecording, setIsRecording] = useState(false);
   const videoPreview = useRef(null);
   const { desktopCapturer, remote } = window.require("electron");
   const { Menu } = remote;
@@ -20,6 +19,7 @@ function App() {
       alert("You must stop recording first.");
     } else {
       mediaRecorder.start();
+      setIsRecording(true);
     }
   };
 
@@ -30,6 +30,7 @@ function App() {
       alert("You must start recording first.");
     } else {
       mediaRecorder.stop();
+      setIsRecording(false);
     }
   };
 
@@ -103,18 +104,24 @@ function App() {
       <main>
         <h1>
           ERDesktop
-          {selectContent === "Select Source" ? "" : `- ${selectContent}`}
+          {selectContent === "Select Source" ? "" : ` - ${selectContent}`}
         </h1>
-
-        <SVG className="cog" src={Cog} />
 
         <video id="videoPreview" autoPlay ref={videoPreview}></video>
 
         <div className="button-container">
-          <button id="startVideo" onClick={startVideo}>
+          <button
+            id="startVideo"
+            onClick={startVideo}
+            style={{ backgroundColor: isRecording ? "gray" : "white" }}
+          >
             Start
           </button>
-          <button id="stopVideo" onClick={stopVideo}>
+          <button
+            id="stopVideo"
+            onClick={stopVideo}
+            style={{ backgroundColor: isRecording ? "white" : "gray" }}
+          >
             Stop
           </button>
           <button id="selectVideo" onClick={getSources}>
